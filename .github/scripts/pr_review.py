@@ -15,6 +15,8 @@ Environment variables (set by the workflow):
                        Defaults to GitHub Models: https://models.inference.ai.azure.com
   AI_MODEL           – Optional. Model identifier.
                        Defaults to "gpt-4o-mini".
+
+Dependencies: see .github/scripts/requirements.txt (openai, PyGithub)
 """
 
 from __future__ import annotations
@@ -23,7 +25,8 @@ import os
 import sys
 import textwrap
 
-from github import Github
+from github import Github, GithubException
+from openai import APIError as OpenAIAPIError
 from openai import OpenAI
 
 # ---------------------------------------------------------------------------
@@ -38,8 +41,8 @@ AI_API_KEY = os.environ.get("AI_API_KEY") or GITHUB_TOKEN
 AI_BASE_URL = os.environ.get("AI_BASE_URL") or "https://models.inference.ai.azure.com"
 AI_MODEL = os.environ.get("AI_MODEL") or "gpt-4o-mini"
 
-MAX_DIFF_CHARS = 8_000   # Keep prompt within model context limits
-MAX_RUBRIC_CHARS = 6_000
+MAX_DIFF_CHARS = 8_000   # ~2k tokens at ~4 chars/token — keeps the prompt well within
+MAX_RUBRIC_CHARS = 6_000  # gpt-4o-mini's 128k-token context while controlling API cost
 
 # ---------------------------------------------------------------------------
 # Load rubric
@@ -156,7 +159,7 @@ def main() -> None:
             temperature=0.4,
         )
         critique = completion.choices[0].message.content or "(No critique generated.)"
-    except Exception as exc:  # noqa: BLE001
+    except (OpenAIAPIError, OSError) as exc:
         print(f"WARNING: AI API call failed ({exc}). Posting fallback comment.", file=sys.stderr)
         critique = textwrap.dedent(f"""\
             > ⚠️ The Career Catalyst AI review could not be completed automatically.
