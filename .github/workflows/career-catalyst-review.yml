@@ -1,0 +1,39 @@
+name: Career Catalyst — Architectural Peer Review
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  peer-review:
+    name: Generate Architectural Peer Review
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout base branch (safe for fork PRs — never checks out untrusted code)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r .github/scripts/requirements.txt
+
+      - name: Generate and post architectural peer review
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Optional: set AI_API_KEY to use a custom AI provider (OpenAI, Anthropic, etc.)
+          # If not set, the workflow falls back to GitHub Models via GITHUB_TOKEN.
+          AI_API_KEY: ${{ secrets.AI_API_KEY }}
+          AI_BASE_URL: ${{ secrets.AI_BASE_URL }}
+          AI_MODEL: ${{ secrets.AI_MODEL }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: python .github/scripts/pr_review.py

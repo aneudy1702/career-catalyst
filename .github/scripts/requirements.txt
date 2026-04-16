@@ -1,0 +1,5 @@
+# Dependencies for .github/scripts/pr_review.py
+# Pin exact versions for reproducible, secure CI builds.
+# To update: run `pip install --upgrade openai PyGithub` and record the new versions here.
+openai==2.32.0
+PyGithub==2.9.1

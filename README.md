@@ -21,45 +21,154 @@ The core belief: **great engineers aren't just born at Staff level, they're coac
 
 ---
 
+## Getting Started
+
+Everything below — the IDE agent, the PR reviewer, and the mindset linter — comes pre-configured. There are no build steps. Follow this path and you will be in a live session within minutes.
+
+### Prerequisites
+
+| Tool | Minimum version | Notes |
+|---|---|---|
+| [VS Code](https://code.visualstudio.com/) | latest stable | or use [Cursor](https://www.cursor.com/) — both are supported |
+| [GitHub Copilot](https://github.com/features/copilot) | v1.200+ extension | requires an active Copilot subscription |
+| Git | any recent version | to fork / clone the repo |
+
+> **Using Cursor instead of VS Code?** Skip to [Step 4b](#step-4b--cursor-start-your-first-session) below — everything else is the same.
+
+---
+
+### Step 1 — Fork (or clone) the repository
+
+**Option A — Fork (recommended for personal use)**
+
+1. Click **Fork** in the top-right corner of this page.
+2. Choose your personal GitHub account as the destination.
+3. Clone your fork locally:
+   ```bash
+   git clone https://github.com/<your-username>/career-catalyst.git
+   cd career-catalyst
+   ```
+
+**Option B — Clone directly (read-only / team evaluation)**
+
+```bash
+git clone https://github.com/aneudy1702/career-catalyst.git
+cd career-catalyst
+```
+
+> **Why fork?** The Ghost PR Reviewer workflow needs `pull-requests: write` access. On your own fork, GitHub Actions has this automatically — no configuration needed. If you're evaluating from a direct clone you can still use the IDE features; the PR reviewer just won't auto-post without a fork.
+
+---
+
+### Step 2 — Open in VS Code
+
+```bash
+code .
+```
+
+VS Code will detect the `.vscode/extensions.json` file and immediately show a **"Do you want to install the recommended extensions?"** prompt in the bottom-right corner.
+
+---
+
+### Step 3 — Install recommended extensions
+
+Click **Install** on the notification (or open the Extensions panel → *Show Recommended Extensions*). This installs:
+
+| Extension | What it does in Career Catalyst |
+|---|---|
+| **GitHub Copilot** | Hosts the `@CareerCatalyst` agent |
+| **GitHub Copilot Chat** | Powers the interactive audit/implement session |
+| **GitLens** | Enriches blame/history context the agent sees |
+| **Error Lens** | Renders mindset hints as inline "Yellow Squiggly" warnings |
+
+Wait for all four to finish installing, then reload VS Code when prompted.
+
+---
+
+### Step 4a — VS Code: Start your first session
+
+1. Open the **Copilot Chat** panel (`Ctrl+Shift+I` / `Cmd+Shift+I`).
+2. In the agent picker, select **`@CareerCatalyst`** (VS Code auto-discovers it from `.github/agents/Catalyst.agent.md`).
+3. Start with either mode:
+
+   | Mode | What to type | What happens |
+   |---|---|---|
+   | **Audit** | Paste a problem statement or design brief | The agent benchmarks your thinking and surfaces the "next-level" perspective |
+   | **Implement** | Ask for a solution to a concrete task | The agent delivers code with observability, scalability, and ownership notes baked in |
+
+4. At the end of Phase 2 the agent will ask: *"Would you like to record this as a growth milestone?"* Reply **yes** (or type `/archive`) to receive a structured evidence block for your local `GROWTH_LOG.md`. Decline and nothing is recorded.
+
+---
+
+### Step 4b — Cursor: Start your first session
+
+1. Open the project in Cursor (`cursor .` or **File → Open Folder**).
+2. Open any file and start a **Composer** or **Chat** session.
+3. The Catalyst rules load automatically from `.cursor/rules/catalyst.mdc` — no `@mention` required.
+4. Describe your problem or paste your current solution and the audit → implement flow begins immediately.
+5. At the end of the session the agent offers to generate a **Growth Log Summary** block. Accept to receive it; decline to skip.
+
+---
+
+### Step 5 — Open a Pull Request (PR Reviewer activates automatically)
+
+When you (or any contributor) opens a PR against your fork, the **Ghost PR Reviewer** workflow fires with zero configuration:
+
+1. GitHub Actions runs `.github/workflows/career-catalyst-review.yml`.
+2. The script reads the PR diff, reasons privately against the rubric, and posts an **Architectural Peer Review** comment.
+3. The comment acts as a collegial Staff-level peer — it points to architectural observations and "Paved Path" alternatives. It **never** mentions levels, grades, or rubric codes publicly.
+
+> **No extra secrets required.** The workflow uses `GITHUB_TOKEN` (auto-provided by GitHub Actions) and GitHub Models by default. The reviewer starts working the moment you push your first PR.
+
+---
+
+### Step 6 (optional) — Switch to a custom AI provider
+
+If you want to use a different model (OpenAI, Anthropic, Azure OpenAI, etc.), add these three secrets to your repository (**Settings → Secrets and variables → Actions → New repository secret**):
+
+| Secret | Example value | Description |
+|---|---|---|
+| `AI_API_KEY` | `sk-...` | Your API key from the provider |
+| `AI_BASE_URL` | `https://api.openai.com/v1` | Provider's OpenAI-compatible endpoint |
+| `AI_MODEL` | `gpt-4o` | Model identifier |
+
+Leave these unset and the reviewer falls back to GitHub Models (`gpt-4o-mini`) — no action needed for the default experience.
+
+---
+
+### Step 7 (optional) — Add your company's private rubric
+
+Replace the default rubric with your company's internal engineering ladder:
+
+1. Create `docs/PRIVATE_RUBRIC.md` (this filename is already in `.gitignore` — it will never be committed).
+2. Copy the structure from [`docs/DEFAULT_RUBRIC.md`](docs/DEFAULT_RUBRIC.md) and fill in your company's level definitions.
+3. In VS Code, open the file and include it in context with `#file:docs/PRIVATE_RUBRIC.md` in your prompt — the agent will use it as the primary benchmark.
+
+See [Private Rubric Protocol](#private-rubric-protocol-byor) for full details.
+
+---
+
 ## Directory Structure
 
 ```
 career-catalyst/
 ├── .github/
-│   └── agents/
-│       └── Catalyst.agent.md       # VS Code Copilot agent definition
+│   ├── agents/
+│   │   └── Catalyst.agent.md           # VS Code Copilot agent definition
+│   ├── scripts/
+│   │   └── pr_review.py                # Ghost PR Reviewer — Stealth Mentor script
+│   └── workflows/
+│       └── career-catalyst-review.yml  # GitHub Action: runs on every PR
 ├── .cursor/
 │   └── rules/
-│       └── catalyst.mdc            # Cursor-specific MDC rules
+│       └── catalyst.mdc                # Cursor-specific MDC rules
+├── .vscode/
+│   └── extensions.json                 # Recommended extensions (Copilot, Error Lens, etc.)
 ├── docs/
-│   ├── DEFAULT_RUBRIC.md           # L1–L5 leveling rubric
-│   └── GROWTH_LOG_TEMPLATE.md      # Growth milestone tracking template
+│   ├── DEFAULT_RUBRIC.md               # Engineer 1 → Principal leveling rubric
+│   └── GROWTH_LOG_TEMPLATE.md          # Growth milestone tracking template
 └── README.md
 ```
-
----
-
-## How to Use
-
-### VS Code (GitHub Copilot Agents)
-
-1. **Open this repository** in VS Code with the GitHub Copilot extension installed (v1.200+).
-2. Open the **Copilot Chat** panel (`Ctrl+Shift+I` / `Cmd+Shift+I`).
-3. Select the **CareerCatalyst** agent from the agent picker (`@CareerCatalyst`) — VS Code will auto-detect `.github/agents/Catalyst.agent.md`.
-4. Start a session:
-   - **Audit mode:** Paste a problem statement or describe a system you're designing. The agent will benchmark your thinking against the rubric.
-   - **Implementation mode:** Ask for a solution. The agent delivers it with built-in observability and scalability notes.
-   - **Archivist mode:** At the end of your session, type `@CareerCatalyst /archive` to receive a Growth Log entry you can paste directly into your `GROWTH_LOG.md`.
-
-### Cursor
-
-1. **Open this repository** in Cursor. The `.cursor/rules/catalyst.mdc` file is auto-loaded as an active rule.
-2. Open any file and start a Composer or Chat session.
-3. The Catalyst rules activate automatically — no `@mention` required.
-4. Workflow:
-   - Describe your problem or paste your current solution.
-   - Cursor will apply the three-phase audit → implement → archive flow inline.
-   - Copy the **Growth Log Summary** block from the end of the response.
 
 ---
 
@@ -93,11 +202,30 @@ Use `docs/DEFAULT_RUBRIC.md` as a structural template. Replace or extend the lev
 
 ## Leveling Rubric (Default)
 
-See [`docs/DEFAULT_RUBRIC.md`](docs/DEFAULT_RUBRIC.md) for the default L1–L5 framework.
+See [`docs/DEFAULT_RUBRIC.md`](docs/DEFAULT_RUBRIC.md) for the full **Engineer 1 → Principal** framework (8 levels, anchored by Scope and Ambiguity Tolerance).
 
-## Growth Log
+## Ghost PR Reviewer (Stealth Mentor)
 
-See [`docs/GROWTH_LOG_TEMPLATE.md`](docs/GROWTH_LOG_TEMPLATE.md) to start tracking your milestones.
+Every time a Pull Request is opened or updated, the Career Catalyst agent automatically posts an **architectural peer-review comment** — no manual invocation needed.
+
+**Privacy design:** The PR comment is a permanent, public record. It therefore **never** mentions engineer levels, rubric codes, or career-ladder assessments. Instead, the agent acts as a collegial Staff-level peer: it surfaces architectural observations and suggests "Paved Path" alternatives focused entirely on the code, not the author. Level coaching lives exclusively in the private IDE session.
+
+See [`.github/workflows/career-catalyst-review.yml`](.github/workflows/career-catalyst-review.yml) for setup. The workflow uses GitHub Models by default (no extra secrets needed in most GitHub repositories). To use a custom AI provider, add `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL` as repository secrets.
+
+## Mindset Linter (VS Code)
+
+The [`.vscode/extensions.json`](.vscode/extensions.json) file recommends the extensions that surface Career Catalyst insights directly in the IDE Problems tab:
+
+- **GitHub Copilot / Copilot Chat** — in-editor AI pair programmer and the `@CareerCatalyst` agent host.
+- **Error Lens** — renders warnings inline next to the code, making "Yellow Squiggly" mindset hints immediately visible without opening the Problems panel.
+
+When VS Code prompts you to install recommended extensions, accept — this activates the full passive-observation workflow.
+
+## Growth Log (Opt-In)
+
+After a session, the `@CareerCatalyst` agent will **offer** to generate a Growth Log entry. You choose whether to accept — nothing is recorded automatically. When you accept, the agent produces a structured evidence block you can paste into your local `GROWTH_LOG.md`.
+
+See [`docs/GROWTH_LOG_TEMPLATE.md`](docs/GROWTH_LOG_TEMPLATE.md) for the template. This file is intentionally kept local; never commit entries containing internal system names or confidential context.
 
 ---
 

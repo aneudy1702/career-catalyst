@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    // GitHub Copilot — AI pair programmer (required for CareerCatalyst agent)
+    "GitHub.copilot",
+    // GitHub Copilot Chat — interactive AI chat panel
+    "GitHub.copilot-chat",
+    // Error Lens — surfaces Problems-tab warnings inline in the editor,
+    // making the "Yellow Squiggly" mindset hints immediately visible
+    "usernamehw.errorlens",
+    // GitLens — enriches Git history so engineers see the evolution of decisions
+    "eamodio.gitlens",
+    // Code Spell Checker — keeps documentation and comments professional
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

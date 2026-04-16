@@ -32,10 +32,10 @@
 **Thinking Shift:**
 > Identify the level-of-thinking transition this work represents. Use the format: `[Current Level] → [Target Level]` and explain what changed in how you approached the problem.
 
-- **From:** Senior (L3) — *"How do I design the auth service correctly?"*
-- **To:** Staff (L4) — *"How do I design the auth migration so that every team consuming auth can adopt it without a rewrite, and so the platform team can iterate on it independently?"*
+- **From:** Senior 1 (S1) — *"How do I design the auth service correctly?"*
+- **To:** Staff (ST) — *"How do I design the auth migration so that every team consuming auth can adopt it without a rewrite, and so the platform team can iterate on it independently?"*
 
-*Replace the example above with your own shift. Refer to [`docs/DEFAULT_RUBRIC.md`](DEFAULT_RUBRIC.md) for level definitions.*
+*Replace the example above with your own shift. Refer to [`docs/DEFAULT_RUBRIC.md`](DEFAULT_RUBRIC.md) for level definitions (E1 → E2 → E3 → S1 → S2 → ST → SS → PR).*
 
 ---
 
@@ -66,7 +66,7 @@
 **Self-Assessment:**
 > Rate your confidence in each dimension from the rubric for this piece of work.
 
-| Dimension | Self-Rating (L1–L5) | Notes |
+| Dimension | Self-Rating (E1–PR) | Notes |
 |-----------|---------------------|-------|
 | Scope of Impact | | |
 | Technical Depth | | |
@@ -112,8 +112,8 @@ Three separate teams owned different legs of the checkout pipeline (cart, paymen
 
 **Thinking Shift:**
 
-- **From:** Senior (L3) — *"I should add better logging to the checkout service I own."*
-- **To:** Staff (L4) — *"I need to define a platform-wide trace propagation contract so that any engineer in any of these three services can follow a request end-to-end without knowing the other systems."*
+- **From:** Senior 1 (S1) — *"I should add better logging to the checkout service I own."*
+- **To:** Staff (ST) — *"I need to define a platform-wide trace propagation contract so that any engineer in any of these three services can follow a request end-to-end without knowing the other systems."*
 
 ---
 
@@ -128,12 +128,12 @@ Designed and drove adoption of a shared `X-Trace-Context` header standard across
 
 **Date:** 2025-03-12
 **Scenario:** Observability strategy for distributed checkout pipeline
-**Level Demonstrated:** L4 (Staff)
+**Level Demonstrated:** ST (Staff Engineer)
 
 **Thinking Shift Detected:**
 You moved from a reactive, service-scoped solution ("fix logging in my service") to a
 platform-level contract ("define a trace propagation standard all teams adopt"). This is
-the L3 → L4 transition: your solution multiplied the effectiveness of engineers beyond
+the S1 → ST transition: your solution multiplied the effectiveness of engineers beyond
 your team without requiring them to change how they think about their own service.
 
 **Promotion Signal (Staff):**
@@ -153,13 +153,13 @@ creating a platform-level observability contract used by three independent teams
 
 **Self-Assessment:**
 
-| Dimension | Self-Rating (L1–L5) | Notes |
+| Dimension | Self-Rating (E1–PR) | Notes |
 |-----------|---------------------|-------|
-| Scope of Impact | L4 | Affected 3 teams, not just my service |
-| Technical Depth | L3 | Solid but not novel — standard OTel patterns |
-| Cross-team Influence | L4 | RFC + design reviews + reference impl |
-| Problem Framing | L4 | Reframed "fix logging" into "platform contract" |
-| Observability & Ops | L4 | This was the whole work |
+| Scope of Impact | ST | Affected 3 teams, not just my service |
+| Technical Depth | S1 | Solid but not novel — standard OTel patterns |
+| Cross-team Influence | ST | RFC + design reviews + reference impl |
+| Problem Framing | ST | Reframed "fix logging" into "platform contract" |
+| Observability & Ops | ST | This was the whole work |
 
 ---
 
