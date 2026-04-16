@@ -1,7 +1,7 @@
-name: Career Catalyst — Level-Up PR Review
+name: Career Catalyst — Architectural Peer Review
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize, reopened]
 
 permissions:
@@ -9,12 +9,14 @@ permissions:
   pull-requests: write
 
 jobs:
-  level-up-review:
-    name: Generate Level-Up Critique
+  peer-review:
+    name: Generate Architectural Peer Review
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout base branch (safe for fork PRs — never checks out untrusted code)
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -24,7 +26,7 @@ jobs:
       - name: Install dependencies
         run: pip install -r .github/scripts/requirements.txt
 
-      - name: Generate and post Level-Up critique
+      - name: Generate and post architectural peer review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # Optional: set AI_API_KEY to use a custom AI provider (OpenAI, Anthropic, etc.)

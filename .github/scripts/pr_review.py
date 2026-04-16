@@ -67,8 +67,7 @@ def load_rubric() -> str:
 # Build PR diff summary
 # ---------------------------------------------------------------------------
 
-def build_diff_summary(pr) -> str:
-    files = list(pr.get_files())
+def build_diff_summary(files: list) -> str:
     parts: list[str] = []
     for f in files[:25]:  # Cap at 25 files to stay within limits
         patch = f.patch or "(binary or no diff)"
@@ -141,8 +140,8 @@ def main() -> None:
     pr = repo.get_pull(PR_NUMBER)
 
     rubric = load_rubric()
-    diff_summary = build_diff_summary(pr)
-    files = list(pr.get_files())
+    files = list(pr.get_files())          # Fetch once — reused for diff and file_count
+    diff_summary = build_diff_summary(files)
 
     user_message = USER_TEMPLATE.format(
         title=pr.title,
@@ -167,18 +166,30 @@ def main() -> None:
         )
         critique = completion.choices[0].message.content or "(No critique generated.)"
     except (OpenAIAPIError, OSError) as exc:
-        print(f"WARNING: AI API call failed ({exc}). Posting fallback comment.", file=sys.stderr)
+        exc_type = type(exc).__name__
+        # Log the full exception to Actions stderr for debugging; never echo it publicly.
+        print(f"WARNING: AI API call failed ({exc_type}: {exc}). Posting fallback comment.", file=sys.stderr)
         critique = textwrap.dedent(f"""\
             > ⚠️ The Career Catalyst automated review could not be completed.
             >
-            > **Reason:** `{exc}`
+            > **Error type:** `{exc_type}`
             >
-            > To enable the review, ensure `AI_API_KEY` (or GitHub Models access)
-            > is configured in your repository secrets, then re-run the workflow.
+            > Check the workflow run logs for details. To enable the review, ensure
+            > `AI_API_KEY` (or GitHub Models access) is configured in your repository
+            > secrets, then re-run the workflow.
         """)
 
     comment_body = COMMENT_TEMPLATE.format(critique=critique)
-    pr.create_issue_comment(comment_body)
+    try:
+        pr.create_issue_comment(comment_body)
+    except GithubException as exc:
+        print(
+            f"WARNING: Failed to post Career Catalyst comment to PR #{PR_NUMBER} "
+            f"({type(exc).__name__}). This commonly happens when the workflow token "
+            "does not have write access to pull requests (e.g., PRs from forks).",
+            file=sys.stderr,
+        )
+        return
     print(f"✅ Career Catalyst comment posted to PR #{PR_NUMBER}.")
 
 
