@@ -29,6 +29,7 @@ from __future__ import annotations
 import os
 import sys
 import textwrap
+from typing import Any
 
 from github import Github, GithubException
 from openai import APIError as OpenAIAPIError
@@ -67,7 +68,7 @@ def load_rubric() -> str:
 # Build PR diff summary
 # ---------------------------------------------------------------------------
 
-def build_diff_summary(files: list) -> str:
+def build_diff_summary(files: list[Any]) -> str:
     parts: list[str] = []
     for f in files[:25]:  # Cap at 25 files to stay within limits
         patch = f.patch or "(binary or no diff)"
