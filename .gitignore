@@ -1,0 +1,15 @@
+# Private rubric — never commit internal company leveling data
+docs/PRIVATE_RUBRIC.md
+
+# Personal growth log — may contain proprietary context
+docs/GROWTH_LOG.md
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Editor artifacts
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
