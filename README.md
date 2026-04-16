@@ -55,7 +55,7 @@ career-catalyst/
 4. Start a session:
    - **Audit mode:** Paste a problem statement or describe a system you're designing. The agent will benchmark your thinking against the rubric.
    - **Implementation mode:** Ask for a solution. The agent delivers it with built-in observability and scalability notes.
-   - **Archivist mode:** At the end of your session, type `@CareerCatalyst /archive` to receive a Growth Log entry you can paste directly into your `GROWTH_LOG.md`.
+   - **Archivist mode (opt-in):** After Phase 2, the agent will ask if you'd like to record this as a growth milestone. Say yes, or type `@CareerCatalyst /archive` at any point, to receive a Growth Log entry you can paste into your local `GROWTH_LOG.md`. Say no and nothing is recorded.
 
 ### Cursor
 
@@ -64,8 +64,8 @@ career-catalyst/
 3. The Catalyst rules activate automatically — no `@mention` required.
 4. Workflow:
    - Describe your problem or paste your current solution.
-   - Cursor will apply the three-phase audit → implement → archive flow inline.
-   - Copy the **Growth Log Summary** block from the end of the response.
+   - Cursor will apply the audit → implement flow inline.
+   - At the end of the session, the agent will offer to generate a **Growth Log Summary** block. Accept to receive it, or decline to skip.
 
 ---
 
@@ -101,9 +101,11 @@ Use `docs/DEFAULT_RUBRIC.md` as a structural template. Replace or extend the lev
 
 See [`docs/DEFAULT_RUBRIC.md`](docs/DEFAULT_RUBRIC.md) for the full **Engineer 1 → Principal** framework (8 levels, anchored by Scope and Ambiguity Tolerance).
 
-## Ghost PR Reviewer
+## Ghost PR Reviewer (Stealth Mentor)
 
-Every time a Pull Request is opened or updated, the Career Catalyst agent automatically posts a **Level-Up critique** as a PR comment — no manual invocation needed.
+Every time a Pull Request is opened or updated, the Career Catalyst agent automatically posts an **architectural peer-review comment** — no manual invocation needed.
+
+**Privacy design:** The PR comment is a permanent, public record. It therefore **never** mentions engineer levels, rubric codes, or career-ladder assessments. Instead, the agent acts as a collegial Staff-level peer: it surfaces architectural observations and suggests "Paved Path" alternatives focused entirely on the code, not the author. Level coaching lives exclusively in the private IDE session.
 
 See [`.github/workflows/career-catalyst-review.yml`](.github/workflows/career-catalyst-review.yml) for setup. The workflow uses GitHub Models by default (no extra secrets needed in most GitHub repositories). To use a custom AI provider, add `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL` as repository secrets.
 
@@ -116,9 +118,11 @@ The [`.vscode/extensions.json`](.vscode/extensions.json) file recommends the ext
 
 When VS Code prompts you to install recommended extensions, accept — this activates the full passive-observation workflow.
 
-## Growth Log
+## Growth Log (Opt-In)
 
-See [`docs/GROWTH_LOG_TEMPLATE.md`](docs/GROWTH_LOG_TEMPLATE.md) to start tracking your milestones.
+After a session, the `@CareerCatalyst` agent will **offer** to generate a Growth Log entry. You choose whether to accept — nothing is recorded automatically. When you accept, the agent produces a structured evidence block you can paste into your local `GROWTH_LOG.md`.
+
+See [`docs/GROWTH_LOG_TEMPLATE.md`](docs/GROWTH_LOG_TEMPLATE.md) for the template. This file is intentionally kept local; never commit entries containing internal system names or confidential context.
 
 ---
 
