@@ -61,7 +61,7 @@ def load_rubric() -> str:
             content = fh.read()
         return content[:MAX_RUBRIC_CHARS]
     except FileNotFoundError:
-        return "(Rubric file not found — using built-in defaults.)"
+        return "(Rubric file not found.)"
 
 # ---------------------------------------------------------------------------
 # Build PR diff summary
