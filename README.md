@@ -26,14 +26,20 @@ The core belief: **great engineers aren't just born at Staff level, they're coac
 ```
 career-catalyst/
 ├── .github/
-│   └── agents/
-│       └── Catalyst.agent.md       # VS Code Copilot agent definition
+│   ├── agents/
+│   │   └── Catalyst.agent.md           # VS Code Copilot agent definition
+│   ├── scripts/
+│   │   └── pr_review.py                # Ghost PR Reviewer — AI Level-Up critique script
+│   └── workflows/
+│       └── career-catalyst-review.yml  # GitHub Action: runs on every PR
 ├── .cursor/
 │   └── rules/
-│       └── catalyst.mdc            # Cursor-specific MDC rules
+│       └── catalyst.mdc                # Cursor-specific MDC rules
+├── .vscode/
+│   └── extensions.json                 # Recommended extensions (Copilot, Error Lens, etc.)
 ├── docs/
-│   ├── DEFAULT_RUBRIC.md           # L1–L5 leveling rubric
-│   └── GROWTH_LOG_TEMPLATE.md      # Growth milestone tracking template
+│   ├── DEFAULT_RUBRIC.md               # Engineer 1 → Principal leveling rubric
+│   └── GROWTH_LOG_TEMPLATE.md          # Growth milestone tracking template
 └── README.md
 ```
 
@@ -93,7 +99,22 @@ Use `docs/DEFAULT_RUBRIC.md` as a structural template. Replace or extend the lev
 
 ## Leveling Rubric (Default)
 
-See [`docs/DEFAULT_RUBRIC.md`](docs/DEFAULT_RUBRIC.md) for the default L1–L5 framework.
+See [`docs/DEFAULT_RUBRIC.md`](docs/DEFAULT_RUBRIC.md) for the full **Engineer 1 → Principal** framework (8 levels, anchored by Scope and Ambiguity Tolerance).
+
+## Ghost PR Reviewer
+
+Every time a Pull Request is opened or updated, the Career Catalyst agent automatically posts a **Level-Up critique** as a PR comment — no manual invocation needed.
+
+See [`.github/workflows/career-catalyst-review.yml`](.github/workflows/career-catalyst-review.yml) for setup. The workflow uses GitHub Models by default (no extra secrets needed in most GitHub repositories). To use a custom AI provider, add `AI_API_KEY`, `AI_BASE_URL`, and `AI_MODEL` as repository secrets.
+
+## Mindset Linter (VS Code)
+
+The [`.vscode/extensions.json`](.vscode/extensions.json) file recommends the extensions that surface Career Catalyst insights directly in the IDE Problems tab:
+
+- **GitHub Copilot / Copilot Chat** — in-editor AI pair programmer and the `@CareerCatalyst` agent host.
+- **Error Lens** — renders warnings inline next to the code, making "Yellow Squiggly" mindset hints immediately visible without opening the Problems panel.
+
+When VS Code prompts you to install recommended extensions, accept — this activates the full passive-observation workflow.
 
 ## Growth Log
 
