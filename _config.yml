@@ -1,0 +1,24 @@
+title: Career Catalyst
+description: >-
+  AI-powered mentorship engine for engineers who are serious about leveling up.
+  Pairs every coding session with a Staff-level thinking partner.
+url: "https://aneudy1702.github.io"
+baseurl: "/career-catalyst"
+
+theme: minima
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# Exclude from processing
+exclude:
+  - .github/
+  - .cursor/
+  - .vscode/
+  - .gitignore
+  - "*.py"
