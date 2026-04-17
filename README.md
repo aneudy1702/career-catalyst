@@ -104,8 +104,9 @@ career-catalyst/
 ├── .cursor/
 │   └── rules/           # Cursor-specific MDC rules
 ├── docs/
-│   ├── DEFAULT_RUBRIC.md  # Engineer 1 → Principal framework
-│   └── GROWTH_LOG.md      # Your private promotion evidence
+│   ├── DEFAULT_RUBRIC.md        # Engineer 1 → Principal framework
+│   ├── GROWTH_LOG_TEMPLATE.md   # Template installed by the CLI
+│   └── GROWTH_LOG.md            # Your private log — gitignored, user-created
 └── bin/
     └── catalyst.js      # The NPX installer logic
 ```

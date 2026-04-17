@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "AI-powered Staff-level engineering mentor — installer CLI",
   "bin": {
-    "career-catalyst": "bin/catalyst.js"
+    "career-catalyst": "bin/catalyst.js",
+    "catalyst": "bin/catalyst.js"
   },
   "engines": {
     "node": ">=18.0.0"

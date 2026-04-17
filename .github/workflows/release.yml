@@ -24,6 +24,13 @@ jobs:
       contents: write
 
     steps:
+      - name: Guard — must run from a branch, not a tag
+        run: |
+          if [ "${{ github.ref_type }}" != "branch" ]; then
+            echo "::error::This workflow must be run from a branch, not a tag. ref_type=${{ github.ref_type }}, ref=${{ github.ref }}"
+            exit 1
+          fi
+
       - name: Checkout full history
         uses: actions/checkout@v4
         with:
@@ -48,6 +55,29 @@ jobs:
           NEW_VERSION="${NEW_TAG#v}"
           echo "tag=${NEW_TAG}" >> "$GITHUB_OUTPUT"
           echo "version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Sync installer version constants
+        run: |
+          NEW_TAG="${{ steps.version.outputs.tag }}"
+          NEW_VERSION="${{ steps.version.outputs.version }}"
+
+          if [ ! -f bin/catalyst.js ]; then
+            echo "Expected bin/catalyst.js to exist so release metadata can be synchronized."
+            exit 1
+          fi
+
+          perl -0pi -e 's/const CLI_VERSION = "[^"]*";/const CLI_VERSION = "'"${NEW_VERSION}"'";/g' bin/catalyst.js
+          perl -0pi -e 's/const RELEASE_TAG = "[^"]*";/const RELEASE_TAG = "'"${NEW_TAG}"'";/g' bin/catalyst.js
+
+          grep -q "const CLI_VERSION = \"${NEW_VERSION}\";" bin/catalyst.js || {
+            echo "Failed to update CLI_VERSION in bin/catalyst.js"
+            exit 1
+          }
+
+          grep -q "const RELEASE_TAG = \"${NEW_TAG}\";" bin/catalyst.js || {
+            echo "Failed to update RELEASE_TAG in bin/catalyst.js"
+            exit 1
+          }
 
       - name: Generate changelog entry
         id: changelog
@@ -95,7 +125,7 @@ jobs:
       - name: Commit release artifacts
         run: |
           VERSION="${{ steps.version.outputs.tag }}"
-          git add package.json CHANGELOG.md
+          git add package.json CHANGELOG.md bin/catalyst.js
           # Include lockfile if present
           [ -f package-lock.json ] && git add package-lock.json || true
           git commit -m "chore: release ${VERSION}"
