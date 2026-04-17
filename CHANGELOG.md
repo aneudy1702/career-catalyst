@@ -10,6 +10,12 @@ Versions follow [Semantic Versioning](https://semver.org/).
 ## [Unreleased]
 
 
+
+## [v1.0.3] - 2026-04-17
+
+- ci: add push tags trigger to npm-publish workflow
+- fix: resolve YAML syntax error in npm-publish.yml line 44
+
 ## [v1.0.2] - 2026-04-17
 
 - ci: fix issue title/body — accurate messaging and unindented markdown table
