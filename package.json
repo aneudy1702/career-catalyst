@@ -5,6 +5,9 @@
   "bin": {
     "catalyst": "bin/catalyst.js"
   },
+  "files": [
+    "bin"
+  ],
   "scripts": {
     "test": "node --test"
   },

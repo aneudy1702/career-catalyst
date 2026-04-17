@@ -4,7 +4,7 @@
  * Tests for bin/catalyst.js installer CLI.
  *
  * Uses only Node's built-in test runner and assert module (Node >=18).
- * No network access is required — all tests exercise offline code paths.
+ * All tests exercise offline code paths — no network requests are made.
  */
 
 const { test } = require('node:test');
@@ -18,11 +18,15 @@ const INSTALLER = path.resolve(__dirname, '..', 'bin', 'catalyst.js');
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function runCLI(args = [], cwd = process.cwd(), timeout = 2_000) {
+// extraEnv merges additional env vars into the subprocess environment.
+// Only use for test-specific flags (e.g. CATALYST_CHECK_ONLY).
+// PATH and other critical variables are inherited from process.env.
+function runCLI(args = [], cwd = process.cwd(), timeout = 2_000, extraEnv = {}) {
   return spawnSync(process.execPath, [INSTALLER, ...args], {
     cwd,
     encoding: 'utf8',
     timeout,
+    env: { ...process.env, ...extraEnv },
   });
 }
 
@@ -77,22 +81,20 @@ test('exits 1 with a clear error when run outside a git repository', () => {
 
 test('proceeds past git check when run inside a git repository', () => {
   // Make a minimal fake git repo (just a .git dir) so the guard passes.
-  // The process will then attempt a network download and eventually fail or
-  // time out, but the git-ok log line must appear before that happens.
+  // CATALYST_CHECK_ONLY=1 makes the installer exit after the git check
+  // without making any network requests, keeping this test fast and reliable.
   const tmpDir = makeTempDir();
   try {
     fs.mkdirSync(path.join(tmpDir, '.git'));
 
-    const result = runCLI([], tmpDir, 10_000);
+    const result = runCLI([], tmpDir, 5_000, { CATALYST_CHECK_ONLY: '1' });
+    assert.strictEqual(result.status, 0, `expected exit 0, got ${result.status}\n${result.stderr}`);
+
     const combined = result.stdout + result.stderr;
-
-    // The git guard should have logged success and moved on
+    // The git guard should have logged success
     assert.match(combined, /Git repository detected/i);
-
-    // Must NOT be the git-guard failure
-    const isGitGuardError =
-      result.status === 1 && /No \.git directory/i.test(combined);
-    assert.ok(!isGitGuardError, 'Should not fail on git root guard when .git dir exists');
+    // Check-only mode should have confirmed the early exit
+    assert.match(combined, /Check-only mode/i);
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
