@@ -8,5 +8,9 @@
   "engines": {
     "node": ">=18.0.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aneudy1702/career-catalyst.git"
+  },
   "license": "MIT"
 }

@@ -1,0 +1,111 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump type"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Tag, version, and changelog
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version in package.json
+        id: version
+        run: |
+          # npm version writes the new version to stdout as "vX.Y.Z"
+          NEW_TAG=$(npm version ${{ inputs.bump }} --no-git-tag-version)
+          NEW_VERSION="${NEW_TAG#v}"
+          echo "tag=${NEW_TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Generate changelog entry
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.tag }}"
+          DATE=$(date -u +%Y-%m-%d)
+          PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -z "$PREV_TAG" ]; then
+            LOG=$(git log --pretty=format:"- %s" --no-merges)
+          else
+            LOG=$(git log "${PREV_TAG}..HEAD" --pretty=format:"- %s" --no-merges)
+          fi
+
+          # Build the new entry (plain string, no printf escape sequences)
+          ENTRY=$(printf '## [%s] - %s\n\n%s' "$VERSION" "$DATE" "$LOG")
+
+          if [ -f CHANGELOG.md ]; then
+            if grep -q '^## \[Unreleased\]' CHANGELOG.md; then
+              # Insert after the [Unreleased] section, preserving the preamble
+              awk -v entry="$ENTRY" '
+                BEGIN { inserted = 0; in_unreleased = 0 }
+                /^## \[Unreleased\]/ { print; in_unreleased = 1; next }
+                in_unreleased && /^## / && !inserted {
+                  printf "\n%s\n\n", entry
+                  inserted = 1
+                  in_unreleased = 0
+                }
+                { print }
+                END { if (in_unreleased && !inserted) printf "\n%s\n", entry }
+              ' CHANGELOG.md > CHANGELOG.md.tmp && mv CHANGELOG.md.tmp CHANGELOG.md
+            else
+              # Insert before the first existing release heading so the preamble stays in place
+              awk -v entry="$ENTRY" '
+                BEGIN { inserted = 0 }
+                /^## \[/ && !inserted { printf "%s\n\n", entry; inserted = 1 }
+                { print }
+                END { if (!inserted) printf "\n%s\n", entry }
+              ' CHANGELOG.md > CHANGELOG.md.tmp && mv CHANGELOG.md.tmp CHANGELOG.md
+            fi
+          else
+            printf "# Changelog\n\n%s\n" "$ENTRY" > CHANGELOG.md
+          fi
+
+      - name: Commit release artifacts
+        run: |
+          VERSION="${{ steps.version.outputs.tag }}"
+          git add package.json CHANGELOG.md
+          # Include lockfile if present
+          [ -f package-lock.json ] && git add package-lock.json || true
+          git commit -m "chore: release ${VERSION}"
+
+      - name: Create annotated tag
+        run: |
+          VERSION="${{ steps.version.outputs.tag }}"
+          git tag -a "${VERSION}" -m "Release ${VERSION}"
+
+      - name: Push commit and tag
+        run: |
+          # Atomic push ensures the commit and tag land together or not at all
+          git push --atomic origin "HEAD:${{ github.ref_name }}" "${{ steps.version.outputs.tag }}"
