@@ -10,7 +10,7 @@ Career Catalyst is a private AI thinking partner that lives in your IDE. It does
 
 We used Career Catalyst to audit its own installer script. Instead of just writing code, the agent identified a critical **Thinking Shift** required to move from Senior to Staff level.
 
-![Career Catalyst auditing its own installer script — Thinking Shift from Senior to Staff](docs/assets/demo.png)
+*Demo screenshot intentionally omitted until the repository includes a committed image asset for this section.*
 
 ---
 
@@ -31,14 +31,34 @@ The agent operates in three distinct phases designed to shift your mindset while
 The fastest way to get a Staff-level mentor in your IDE is via the one-liner installer. Open your project root in your terminal:
 
 ```bash
-npx career-catalyst install
+npx career-catalyst
 ```
 
 **What this does:**
 
-1. Detects your IDE (VS Code or Cursor).
+1. Installs the Career Catalyst agent files for supported editor setups.
 2. Installs the `@CareerCatalyst` agent instructions.
-3. Initializes your private `GROWTH_LOG.md`.
+3. Downloads `docs/GROWTH_LOG_TEMPLATE.md` for you to copy into your private growth log.
+
+---
+
+## Scope & Caveats
+
+### Repository-scoped by design
+
+Career Catalyst's agent files (`.github/agents/`, `.github/copilot-instructions.md`, `.cursor/rules/`) live inside each project's `.github` or `.cursor` folder. This means:
+
+- The mentor is **active only in the repository where the files are installed**.
+- To use it in a different project, run `npx career-catalyst` (or copy the files manually) in that project's root.
+- This is intentional — the agent can read your codebase, apply your project's rubric, and keep your growth log alongside your work.
+
+### Alternatives for broader coverage
+
+| Goal | Approach |
+| :--- | :--- |
+| Skip `npx` on every project | `npm install -g career-catalyst` — installs the CLI globally so you can just run `career-catalyst` from any project root. |
+| VS Code: mentor active in all workspaces | Add the contents of `.github/copilot-instructions.md` to VS Code's **User-level Copilot instructions** via **Settings → Extensions → GitHub Copilot → Chat → Code Generation: Instructions**. The agent definition (`.github/agents/CareerCatalyst.agent.md`) still needs to be present per-repo to use `@CareerCatalyst` by name. |
+| Cursor: mentor active in all projects | Paste the contents of `.cursor/rules/catalyst.mdc` into **Cursor Settings → General → Rules for AI**. These global rules apply to every project you open. |
 
 ---
 
@@ -50,7 +70,7 @@ If you prefer to set things up yourself or are using a restricted environment:
 
 Copy the following files into your repository root:
 
-- **VS Code:** `.github/agents/CareerCatalyst.agent.md`
+- **VS Code:** `.github/agents/CareerCatalyst.agent.md` and `.github/copilot-instructions.md`
 - **Cursor:** `.cursor/rules/catalyst.mdc`
 
 ### 2. The Rubrics
@@ -70,7 +90,7 @@ Ensure `docs/DEFAULT_RUBRIC.md` is present. The agent uses this as the "Source o
 
 1. **Create a local-only file:** Create `docs/PRIVATE_RUBRIC.md`. (This is already in `.gitignore`).
 2. **Paste your ladder:** Fill it with your company's specific level definitions.
-3. **The Agent Adapts:** The Catalyst will automatically detect this file and prioritize it over the default, ensuring your "Growth Log" is calibrated to your actual promotion criteria.
+3. **Put it in context:** Open or include `docs/PRIVATE_RUBRIC.md` in your chat/session context when you start a session. When that file is in context, the Catalyst will use it as the primary rubric; otherwise it falls back to `docs/DEFAULT_RUBRIC.md`, ensuring your "Growth Log" is calibrated to your actual promotion criteria.
 
 ---
 
@@ -79,13 +99,14 @@ Ensure `docs/DEFAULT_RUBRIC.md` is present. The agent uses this as the "Source o
 ```text
 career-catalyst/
 ├── .github/
-│   ├── agents/          # VS Code Copilot agent definition
-│   └── instructions.md  # Global instructions for every chat
+│   ├── agents/                  # VS Code Copilot agent definition
+│   └── copilot-instructions.md  # Global instructions for every chat
 ├── .cursor/
 │   └── rules/           # Cursor-specific MDC rules
 ├── docs/
-│   ├── DEFAULT_RUBRIC.md  # Engineer 1 → Principal framework
-│   └── GROWTH_LOG.md      # Your private promotion evidence
+│   ├── DEFAULT_RUBRIC.md        # Engineer 1 → Principal framework
+│   ├── GROWTH_LOG_TEMPLATE.md   # Template installed by the CLI
+│   └── GROWTH_LOG.md            # Your private log — gitignored, user-created
 └── bin/
     └── catalyst.js      # The NPX installer logic
 ```
