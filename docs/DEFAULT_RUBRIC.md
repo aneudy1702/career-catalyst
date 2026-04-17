@@ -77,6 +77,7 @@ Each level up requires you to carry the *full weight* of the previous scope whil
 - **Thinking horizon:** Quarters.
 - **Risk horizon:** "Does this constrain or unlock the organization's ability to move?"
 - **Observable signal:** Writes RFCs and drives adoption across teams. Multiplies team effectiveness through systems and process, not heroics.
+- **Operational Rigor:** Prioritizes idempotency, failure modes, and migration paths. Asks *"what happens when this is run a second time?"* rather than just *"does it work once?"*
 
 ### SS — Senior Staff Engineer (Strategy)
 - **Input:** Business goals, org constraints, competitive pressures.

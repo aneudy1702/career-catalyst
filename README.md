@@ -32,6 +32,7 @@ Everything below — the IDE agent, the PR reviewer, and the mindset linter — 
 | [VS Code](https://code.visualstudio.com/) | latest stable | or use [Cursor](https://www.cursor.com/) — both are supported |
 | [GitHub Copilot](https://github.com/features/copilot) | v1.200+ extension | requires an active Copilot subscription |
 | Git | any recent version | to fork / clone the repo |
+| [Node.js](https://nodejs.org/) | v18.0.0+ | required only if using `npx career-catalyst` installer; not needed for IDE-only usage |
 
 > **Using Cursor instead of VS Code?** Skip to [Step 4b](#step-4b--cursor-start-your-first-session) below — everything else is the same.
 
