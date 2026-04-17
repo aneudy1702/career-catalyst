@@ -80,15 +80,20 @@ Click **Install** on the notification (or open the Extensions panel → *Show Re
 | **GitHub Copilot Chat** | Powers the interactive audit/implement session |
 | **GitLens** | Enriches blame/history context the agent sees |
 | **Error Lens** | Renders mindset hints as inline "Yellow Squiggly" warnings |
+| **Code Spell Checker** | Keeps documentation and comments professional |
 
-Wait for all four to finish installing, then reload VS Code when prompted.
+Wait for all five to finish installing, then reload VS Code when prompted.
 
 ---
 
 ### Step 4a — VS Code: Start your first session
 
+Career Catalyst activates **automatically** for every Copilot Chat session via `.github/copilot-instructions.md` — no `@mention` required. Just open the Copilot Chat panel and start talking.
+
+You can also invoke the agent explicitly for a dedicated session:
+
 1. Open the **Copilot Chat** panel (`Ctrl+Shift+I` / `Cmd+Shift+I`).
-2. In the agent picker, select **`@CareerCatalyst`** (VS Code auto-discovers it from `.github/agents/Catalyst.agent.md`).
+2. In the agent picker, select **`@CareerCatalyst`** (VS Code auto-discovers it from `.github/agents/CareerCatalyst.agent.md`).
 3. Start with either mode:
 
    | Mode | What to type | What happens |
@@ -154,14 +159,15 @@ See [Private Rubric Protocol](#private-rubric-protocol-byor) for full details.
 career-catalyst/
 ├── .github/
 │   ├── agents/
-│   │   └── Catalyst.agent.md           # VS Code Copilot agent definition
+│   │   └── CareerCatalyst.agent.md         # VS Code Copilot agent definition (explicit @CareerCatalyst)
+│   ├── copilot-instructions.md             # VS Code: auto-applies CareerCatalyst to every chat session
 │   ├── scripts/
 │   │   └── pr_review.py                # Ghost PR Reviewer — Stealth Mentor script
 │   └── workflows/
 │       └── career-catalyst-review.yml  # GitHub Action: runs on every PR
 ├── .cursor/
 │   └── rules/
-│       └── catalyst.mdc                # Cursor-specific MDC rules
+│       └── catalyst.mdc                # Cursor-specific MDC rules (alwaysApply: true)
 ├── .vscode/
 │   └── extensions.json                 # Recommended extensions (Copilot, Error Lens, etc.)
 ├── docs/
@@ -216,8 +222,11 @@ See [`.github/workflows/career-catalyst-review.yml`](.github/workflows/career-ca
 
 The [`.vscode/extensions.json`](.vscode/extensions.json) file recommends the extensions that surface Career Catalyst insights directly in the IDE Problems tab:
 
-- **GitHub Copilot / Copilot Chat** — in-editor AI pair programmer and the `@CareerCatalyst` agent host.
+- **GitHub Copilot** — AI pair programmer and the host for the `@CareerCatalyst` agent.
+- **GitHub Copilot Chat** — interactive chat panel that powers the audit → implement session.
 - **Error Lens** — renders warnings inline next to the code, making "Yellow Squiggly" mindset hints immediately visible without opening the Problems panel.
+- **GitLens** — enriches Git blame and history so the agent sees the evolution of decisions.
+- **Code Spell Checker** — keeps documentation and comments professional.
 
 When VS Code prompts you to install recommended extensions, accept — this activates the full passive-observation workflow.
 
