@@ -62,7 +62,7 @@ jobs:
           NEW_VERSION="${{ steps.version.outputs.version }}"
 
           if [ ! -f bin/catalyst.js ]; then
-            echo "Expected bin/catalyst.js to exist so release metadata can be synchronized."
+            echo "::error::Expected bin/catalyst.js to exist so release metadata can be synchronized."
             exit 1
           fi
 
@@ -70,12 +70,12 @@ jobs:
           perl -0pi -e 's/const RELEASE_TAG = "[^"]*";/const RELEASE_TAG = "'"${NEW_TAG}"'";/g' bin/catalyst.js
 
           grep -q "const CLI_VERSION = \"${NEW_VERSION}\";" bin/catalyst.js || {
-            echo "Failed to update CLI_VERSION in bin/catalyst.js"
+            echo "::error::Failed to update CLI_VERSION in bin/catalyst.js"
             exit 1
           }
 
           grep -q "const RELEASE_TAG = \"${NEW_TAG}\";" bin/catalyst.js || {
-            echo "Failed to update RELEASE_TAG in bin/catalyst.js"
+            echo "::error::Failed to update RELEASE_TAG in bin/catalyst.js"
             exit 1
           }
 
