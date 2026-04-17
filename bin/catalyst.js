@@ -33,8 +33,6 @@ const RAW_BASE = `https://raw.githubusercontent.com/${REPO}/${RELEASE_TAG}`;
 const INSTALL_MANIFEST = [
   ['.github/agents/CareerCatalyst.agent.md', '.github/agents/CareerCatalyst.agent.md'],
   ['.github/copilot-instructions.md', '.github/copilot-instructions.md'],
-  ['.github/workflows/career-catalyst-review.yml', '.github/workflows/career-catalyst-review.yml'],
-  ['.github/scripts/pr_review.py', '.github/scripts/pr_review.py'],
   ['.cursor/rules/catalyst.mdc', '.cursor/rules/catalyst.mdc'],
   ['docs/DEFAULT_RUBRIC.md', 'docs/DEFAULT_RUBRIC.md'],
   ['docs/GROWTH_LOG_TEMPLATE.md', 'docs/GROWTH_LOG_TEMPLATE.md'],
