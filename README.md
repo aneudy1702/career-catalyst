@@ -42,6 +42,26 @@ npx career-catalyst
 
 ---
 
+## Scope & Caveats
+
+### Repository-scoped by design
+
+Career Catalyst's agent files (`.github/agents/`, `.github/copilot-instructions.md`, `.cursor/rules/`) live inside each project's `.github` or `.cursor` folder. This means:
+
+- The mentor is **active only in the repository where the files are installed**.
+- To use it in a different project, run `npx career-catalyst` (or copy the files manually) in that project's root.
+- This is intentional — the agent can read your codebase, apply your project's rubric, and keep your growth log alongside your work.
+
+### Alternatives for broader coverage
+
+| Goal | Approach |
+| :--- | :--- |
+| Skip `npx` on every project | `npm install -g career-catalyst` — installs the CLI globally so you can just run `career-catalyst` from any project root. |
+| VS Code: mentor active in all workspaces | Add the contents of `.github/copilot-instructions.md` to VS Code's **User-level Copilot instructions** via **Settings → Extensions → GitHub Copilot → Chat → Code Generation: Instructions**. The agent definition (`.github/agents/CareerCatalyst.agent.md`) still needs to be present per-repo to use `@CareerCatalyst` by name. |
+| Cursor: mentor active in all projects | Paste the contents of `.cursor/rules/catalyst.mdc` into **Cursor Settings → General → Rules for AI**. These global rules apply to every project you open. |
+
+---
+
 ## Manual Installation
 
 If you prefer to set things up yourself or are using a restricted environment:
