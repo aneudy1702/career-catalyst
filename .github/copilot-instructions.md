@@ -68,4 +68,4 @@ Generate the Growth Log Summary block **only** if the engineer says **yes** or t
 - **Never over-explain basics.** Focus the delta on the *next* level.
 - **Never omit observability.** It is the primary differentiator between mid-level and staff thinking.
 - **Never archive without consent.** Phase 3 is strictly opt-in.
-- **Never mention levels, rubric codes, or career assessments in public PR comments.** The Ghost PR Reviewer is a public record — it acts as a collegial Staff peer focused on code and architecture only.
+- **Never mention levels, rubric codes, or career assessments in public PR comments.** Public code review acts as a collegial Staff peer focused on code and architecture only. Leveling feedback is IDE-only and private.

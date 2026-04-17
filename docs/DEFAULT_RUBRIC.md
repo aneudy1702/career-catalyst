@@ -141,6 +141,75 @@ For teams using the previous L1–L5 notation:
 
 ---
 
+## Multi-Role Track Expansions
+
+The core leveling table above applies universally. The sections below provide **role-specific signal anchors** that map each track's typical progression to the shared E1 → PR framework. Each role's "Senior Shift" names the single most important mindset transition — the point where the role stops being execution-focused and starts being strategy-focused.
+
+---
+
+### Track: SRE / Infrastructure Engineering
+
+> **Core tension:** Moving from *fixing incidents* to *deleting incident types*.
+
+| Level | Typical SRE Focus | Senior Shift Signal |
+|-------|-------------------|---------------------|
+| **E1–E2** | Follows runbooks. Responds to alerts. Restores service. | – |
+| **E3** | Authors runbooks. Builds dashboards. Improves on-call ergonomics. | – |
+| **S1** | Designs for reliability. Owns SLOs. Drives post-mortems to root cause. | → **From:** "I fixed the incident. **To:** I eliminated the failure class." |
+| **S2** | Defines cross-service SLO contracts. Architects for fault isolation (bulkheads, circuit breakers, graceful degradation). | → **From:** "My systems are reliable. **To:** Every system I touch is more reliable." |
+| **ST** | Builds self-healing automation, toil-reduction platforms, and reliability frameworks that teams adopt without being asked. Turns incident response into a product. | → **From:** "We respond well to incidents. **To:** The system recovers itself." |
+| **SS–PR** | Sets org-wide reliability strategy. Defines SRE culture. Drives build-vs-buy decisions for observability platforms. Publishes runbooks as policy. | – |
+
+**SRE Thinking Shifts to Watch For:**
+- **Toil awareness:** Does the engineer measure and budget toil, or just accept it?
+- **Proactive vs. reactive reliability:** Are SLOs negotiated upfront or added after the first outage?
+- **Self-healing posture:** Does automation restore service, or does it page a human by default?
+- **Capacity planning horizon:** Is the engineer thinking about today's load or next quarter's?
+
+---
+
+### Track: QA / Quality Engineering
+
+> **Core tension:** Moving from *executing test cases* to *building quality observability that the whole team owns*.
+
+| Level | Typical QA Focus | Senior Shift Signal |
+|-------|------------------|---------------------|
+| **E1–E2** | Executes manual or scripted test cases. Files bugs. Verifies fixes. | – |
+| **E3** | Builds automation frameworks. Expands test coverage. Reduces flaky tests. | – |
+| **S1** | Defines test strategy for a service or feature area. Integrates quality gates into CI/CD. Owns coverage metrics. | → **From:** "I found the bugs. **To:** I prevented the bugs from reaching staging." |
+| **S2** | Designs cross-team quality contracts (API contract testing, consumer-driven contracts). Surfaces quality debt as engineering risk. | → **From:** "My test suite is solid. **To:** Every team's test suite follows the same contract standard." |
+| **ST** | Builds quality platforms: test data management services, observability for test reliability, shift-left frameworks that let developers own quality. Defines the org's quality bar. | → **From:** "QA owns quality. **To:** The whole team owns quality and I built the tooling to make that possible." |
+| **SS–PR** | Sets quality culture and engineering standards. Defines quality as a product capability, not a gate. Drives test architecture across org. | – |
+
+**QA Thinking Shifts to Watch For:**
+- **Domain Validation first:** When QA engineers present test designs, validate their existing test logic before suggesting architectural shifts. The transition from manual to automation is a high-stakes career move — meet them where they are.
+- **Quality ownership model:** Does the engineer treat quality as QA's responsibility or the whole team's?
+- **Observability of quality:** Does the engineer instrument the test suite itself (flakiness rates, coverage trends, time-to-feedback)?
+- **Shift-left thinking:** Are quality gates moving earlier in the cycle, or staying at the end?
+
+---
+
+### Track: Networking / Security Engineering
+
+> **Core tension:** Moving from *configuring rules* to *Policy as Code* and *Zero-Trust Architecture at the platform level*.
+
+| Level | Typical Focus | Senior Shift Signal |
+|-------|---------------|---------------------|
+| **E1–E2** | Applies firewall rules, VPN configs, TLS certs. Follows security checklists. | – |
+| **E3** | Designs network segmentation for a service. Implements auth/authz for an API. Performs threat modeling for a feature. | – |
+| **S1** | Owns security posture for a system. Drives pen-test remediations. Implements security telemetry (audit logs, anomaly detection). | → **From:** "I fixed the vulnerability. **To:** I closed the class of vulnerability." |
+| **S2** | Designs cross-service security contracts (mTLS, service mesh policies, zero-trust network architecture for a domain). | → **From:** "My systems are secure. **To:** Services can't accidentally trust each other." |
+| **ST** | Architects guardrails at the platform level: Policy as Code (OPA, Cedar), automated compliance checks in CI/CD, zero-trust identity frameworks that teams adopt by default. Security becomes invisible infrastructure. | → **From:** "We review every deployment for security. **To:** Security is enforced automatically and developers don't have to think about it." |
+| **SS–PR** | Defines org-wide security strategy and architecture guardrails. Drives zero-trust adoption. Engages with compliance and legal as a technical partner. Publishes security standards as platform policy. | – |
+
+**Networking/Security Thinking Shifts to Watch For:**
+- **Policy vs. procedure:** Are security requirements enforced by automation or by human review?
+- **Zero-trust posture:** Does the design assume the network is trusted, or treat every hop as untrusted?
+- **Compliance as code:** Are compliance requirements encoded as automated tests or as spreadsheet checklists?
+- **Security observability:** Can the engineer tell you *what happened* in the last 24 hours from logs alone?
+
+---
+
 ## Using This Rubric with Career Catalyst
 
 The CareerCatalyst agent uses this rubric in **Phase 1 (Audit)** to:
