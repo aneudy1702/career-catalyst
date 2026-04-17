@@ -51,7 +51,7 @@ This runs directly from the `main` branch of the source repository. Suitable for
 
 | Tool | Minimum version | Notes |
 |---|---|---|
-| [Node.js](https://nodejs.org/) | v18+ | Required for `npx career-catalyst` |
+| [Node.js](https://nodejs.org/) | >=18.0.0 | Required for `npx career-catalyst` |
 | [VS Code](https://code.visualstudio.com/) | latest stable | or use [Cursor](https://www.cursor.com/) — both are supported |
 | [GitHub Copilot](https://github.com/features/copilot) | v1.200+ extension | requires an active Copilot subscription |
 | Git | any recent version | to fork / clone the repo |
