@@ -53,12 +53,12 @@ jobs:
           # npm version writes the new version to stdout as "vX.Y.Z"
           NEW_TAG=$(npm version ${{ inputs.bump }} --no-git-tag-version)
           NEW_VERSION="${NEW_TAG#v}"
+
           echo "tag=${NEW_TAG}" >> "$GITHUB_OUTPUT"
           echo "version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
 
       - name: Sync installer version constants
         run: |
-          NEW_TAG="${{ steps.version.outputs.tag }}"
           NEW_VERSION="${{ steps.version.outputs.version }}"
 
           if [ ! -f bin/catalyst.js ]; then
@@ -66,16 +66,15 @@ jobs:
             exit 1
           fi
 
-          perl -0pi -e 's/const CLI_VERSION = "[^"]*";/const CLI_VERSION = "'"${NEW_VERSION}"'";/g' bin/catalyst.js
-          perl -0pi -e 's/const RELEASE_TAG = "[^"]*";/const RELEASE_TAG = "'"${NEW_TAG}"'";/g' bin/catalyst.js
+          perl -0pi -e "s/const CLI_VERSION = ['\"][^'\"]*['\"];/const CLI_VERSION = '${NEW_VERSION}';/g" bin/catalyst.js
 
-          grep -q "const CLI_VERSION = \"${NEW_VERSION}\";" bin/catalyst.js || {
+          grep -q "const CLI_VERSION = '${NEW_VERSION}';" bin/catalyst.js || {
             echo "::error::Failed to update CLI_VERSION in bin/catalyst.js"
             exit 1
           }
 
-          grep -q "const RELEASE_TAG = \"${NEW_TAG}\";" bin/catalyst.js || {
-            echo "::error::Failed to update RELEASE_TAG in bin/catalyst.js"
+          grep -q 'const RELEASE_TAG = `v${CLI_VERSION}`;' bin/catalyst.js || {
+            echo "::error::Expected RELEASE_TAG to be derived from CLI_VERSION in bin/catalyst.js"
             exit 1
           }
 
