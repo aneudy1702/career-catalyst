@@ -22,7 +22,7 @@ const { execSync } = require('child_process');
 
 // ─── Version & release config ────────────────────────────────────────────────
 
-const CLI_VERSION = '1.0.0';
+const CLI_VERSION = '2.0.0';
 const RELEASE_TAG = `v${CLI_VERSION}`;
 const REPO = 'aneudy1702/career-catalyst';
 const RAW_BASE = `https://raw.githubusercontent.com/${REPO}/${RELEASE_TAG}`;
@@ -37,6 +37,12 @@ const INSTALL_MANIFEST = [
   ['docs/DEFAULT_RUBRIC.md', 'docs/DEFAULT_RUBRIC.md'],
   ['docs/GROWTH_LOG_TEMPLATE.md', 'docs/GROWTH_LOG_TEMPLATE.md'],
 ];
+
+// ─── Global config ────────────────────────────────────────────────────────────
+
+const GLOBAL_CONFIG_DIR = path.join(os.homedir(), '.career-catalyst');
+const GLOBAL_CONFIG_FILE = path.join(GLOBAL_CONFIG_DIR, 'config.json');
+const DEFAULT_GROWTH_LOG_PATH = path.join(GLOBAL_CONFIG_DIR, 'GROWTH_LOG.md');
 
 // ─── Colour helpers ───────────────────────────────────────────────────────────
 
@@ -142,6 +148,65 @@ function prompt(question) {
   });
 }
 
+// ─── Global config setup ──────────────────────────────────────────────────────
+
+/**
+ * Ensures ~/.career-catalyst/config.json exists.
+ * On first run, initiates a conversational setup to ask the user where to store
+ * their Master Growth Log so context persists across repositories.
+ * Idempotent — re-running on an existing config shows a summary and returns.
+ */
+async function ensureGlobalConfig() {
+  // If the config already exists, surface it and return.
+  if (fs.existsSync(GLOBAL_CONFIG_FILE)) {
+    let cfg = {};
+    try {
+      cfg = JSON.parse(fs.readFileSync(GLOBAL_CONFIG_FILE, 'utf8'));
+    } catch (_) { /* malformed config — treat as missing */ }
+
+    if (cfg.growthLogPath) {
+      log.ok(`Global config found: ${GLOBAL_CONFIG_FILE}`);
+      log.ok(`Master Growth Log  : ${cfg.growthLogPath}`);
+      console.log('');
+      return cfg;
+    }
+  }
+
+  // First run — welcome the user and ask for a Growth Log path.
+  console.log('');
+  log.info(`${c.bold}Welcome to Career Catalyst!${c.reset}`);
+  log.info(`This is our first time working together across your repositories.`);
+  log.info(`To remember your growth profile across projects, I need to know`);
+  log.info(`where you want to store your ${c.bold}Master Growth Log${c.reset}.`);
+  console.log('');
+  log.info(`This file is private — it never leaves your machine unless you choose to share it.`);
+  log.info(`Default: ${c.cyan}${DEFAULT_GROWTH_LOG_PATH}${c.reset}`);
+  console.log('');
+
+  const raw = await prompt(
+    `  ${c.yellow}?${c.reset} Master Growth Log path ${c.dim}(press Enter to use default)${c.reset} › `
+  );
+
+  const growthLogPath = raw === '' ? DEFAULT_GROWTH_LOG_PATH : path.resolve(raw.replace(/^~/, os.homedir()));
+
+  // Create the global config directory if it doesn't exist.
+  fs.mkdirSync(GLOBAL_CONFIG_DIR, { recursive: true });
+
+  const cfg = {
+    version: CLI_VERSION,
+    growthLogPath,
+    feedbackStyle: null, // set on first IDE session via conversational onboarding
+    createdAt: new Date().toISOString(),
+  };
+
+  fs.writeFileSync(GLOBAL_CONFIG_FILE, JSON.stringify(cfg, null, 2) + '\n', 'utf8');
+  log.ok(`Global config created : ${GLOBAL_CONFIG_FILE}`);
+  log.ok(`Master Growth Log set : ${growthLogPath}`);
+  console.log('');
+
+  return cfg;
+}
+
 // ─── Conflict resolution ──────────────────────────────────────────────────────
 
 async function resolveConflict(destPath, newContent) {
@@ -208,7 +273,10 @@ async function install() {
     return;
   }
 
-  // 2. Create a dedicated temp directory for atomic staging
+  // 2. Set up the global config (cross-repo memory / Master Growth Log)
+  await ensureGlobalConfig();
+
+  // 3. Create a dedicated temp directory for atomic staging
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'catalyst-install-'));
   log.step(`Staging area created: ${tmpDir}`);
   console.log('');
@@ -287,7 +355,7 @@ async function install() {
     console.log(`${c.bold}────────────────────────────────────────────${c.reset}`);
     console.log('');
     log.info(`Next step: open your project in VS Code or Cursor and start a Copilot Chat session.`);
-    log.info(`See README.md for the full getting-started guide.`);
+    log.info(`The agent will greet you and pick up your growth profile from: ${c.cyan}${GLOBAL_CONFIG_FILE}${c.reset}`);
     console.log('');
 
   } catch (err) {

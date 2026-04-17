@@ -1,8 +1,8 @@
-# Career Catalyst — Automated Mentorship Engine
+# Career Catalyst — Unified Engineering Mindset Platform
 
-> **Scaling Senior Staff mentorship through AI. Stop guessing your level. Start proving it.**
+> **Scaling Staff-level mentorship through AI. For Software Engineers, SREs, QA Engineers, and Security practitioners.**
 
-Career Catalyst is a private AI thinking partner that lives in your IDE. It doesn't just help you write code; it audits your architectural mindset, identifies the gap between your current level and the next, and generates promotion-ready evidence for every session.
+Career Catalyst is a private AI thinking partner that lives in your IDE. It audits your architectural mindset, identifies the gap between your current level and the next, and generates promotion-ready evidence — across repositories, across roles, over your entire career.
 
 ---
 
@@ -16,8 +16,6 @@ We used Career Catalyst to audit its own installer script. Instead of just writi
 
 ## The Growth Loop
 
-The agent operates in three distinct phases designed to shift your mindset while you work.
-
 | Phase | What happens | The Result |
 | :--- | :--- | :--- |
 | **1. Audit** | The agent benchmarks your prompt against the `DEFAULT_RUBRIC.md`. | A "Staff vs. Senior Staff" mindset comparison. |
@@ -26,71 +24,77 @@ The agent operates in three distinct phases designed to shift your mindset while
 
 ---
 
-## Quick Start (The Easy Way)
+## Quick Start — Conversational Onboarding
 
-The fastest way to get a Staff-level mentor in your IDE is via the one-liner installer. Open your project root in your terminal:
+Run this once in any project root:
 
 ```bash
 npx career-catalyst
 ```
 
-**What this does:**
+The installer will:
 
-1. Installs the Career Catalyst agent files for supported editor setups.
-2. Installs the `@CareerCatalyst` agent instructions.
-3. Downloads `docs/GROWTH_LOG_TEMPLATE.md` for you to copy into your private growth log.
+1. Ask you where to store your **Master Growth Log** — a single file that follows you across every repository you work in.
+2. Save your preference to `~/.career-catalyst/config.json` so you never have to answer this again.
+3. Install the agent files into the current project.
+
+**Your first IDE session** is the rest of the onboarding. When you open `@CareerCatalyst` in Copilot Chat, the agent will greet you:
+
+> *"Hey, I'm your Catalyst. It looks like we're just getting started. Do you prefer feedback that's direct and challenging, or supportive and validating? You can change this anytime."*
+
+That's it. No manual config files. No README spelunking.
+
+---
+
+## Private & Persistent
+
+Your growth follows you from project to project — privately.
+
+- **Cross-repo memory:** Your Master Growth Log and feedback style preference are stored in `~/.career-catalyst/config.json`, not inside any project. Switch repos, your context comes with you.
+- **Private mentorship:** Level assessments and growth tracking stay in your IDE. Nothing is posted publicly to PRs.
+- **Local logs:** Your `GROWTH_LOG.md` is for you and your manager. You control what you share.
+- **Zero surveillance:** Career Catalyst is an advocate for the engineer, not a report for the organization.
+
+---
+
+## Multi-Role Support
+
+Career Catalyst v2.0 is a **Technical Leadership Framework** — not just for developers.
+
+| Role | Senior Shift |
+| :--- | :--- |
+| **Software Engineering** | From "feature complete" to "system health and evolution" |
+| **SRE / Infrastructure** | From "fixing the incident" to "deleting the incident type" |
+| **QA / Quality Engineering** | From "executing test cases" to "building quality observability the whole team owns" |
+| **Networking / Security** | From "configuring rules" to "Policy as Code and Zero-Trust at the platform level" |
+
+The agent detects your role from context and applies the right track from `docs/DEFAULT_RUBRIC.md` automatically.
 
 ---
 
 ## Scope & Caveats
 
-### Repository-scoped by design
+### Repository-scoped agent files, global growth memory
 
-Career Catalyst's agent files (`.github/agents/`, `.github/copilot-instructions.md`, `.cursor/rules/`) live inside each project's `.github` or `.cursor` folder. This means:
+The agent files (`.github/agents/`, `.github/copilot-instructions.md`, `.cursor/rules/`) live inside each project. The **growth memory** (`~/.career-catalyst/config.json` and your Master Growth Log) is global — it follows you everywhere.
 
-- The mentor is **active only in the repository where the files are installed**.
-- To use it in a different project, run `npx career-catalyst` (or copy the files manually) in that project's root.
-- This is intentional — the agent can read your codebase, apply your project's rubric, and keep your growth log alongside your work.
-
-### Alternatives for broader coverage
+### Alternatives for broader editor coverage
 
 | Goal | Approach |
 | :--- | :--- |
-| Skip `npx` on every project | `npm install -g career-catalyst` — installs the CLI globally so you can just run `career-catalyst` from any project root. |
-| VS Code: mentor active in all workspaces | Add the contents of `.github/copilot-instructions.md` to VS Code's **User-level Copilot instructions** via **Settings → Extensions → GitHub Copilot → Chat → Code Generation: Instructions**. The agent definition (`.github/agents/CareerCatalyst.agent.md`) still needs to be present per-repo to use `@CareerCatalyst` by name. |
-| Cursor: mentor active in all projects | Paste the contents of `.cursor/rules/catalyst.mdc` into **Cursor Settings → General → Rules for AI**. These global rules apply to every project you open. |
-
----
-
-## Manual Installation
-
-If you prefer to set things up yourself or are using a restricted environment:
-
-### 1. The Agents
-
-Copy the following files into your repository root:
-
-- **VS Code:** `.github/agents/CareerCatalyst.agent.md` and `.github/copilot-instructions.md`
-- **Cursor:** `.cursor/rules/catalyst.mdc`
-
-### 2. The Rubrics
-
-Ensure `docs/DEFAULT_RUBRIC.md` is present. The agent uses this as the "Source of Truth" for your career progression.
-
-### 3. Start a Session
-
-- **VS Code:** Open Copilot Chat and type `@CareerCatalyst [your problem]`.
-- **Cursor:** Open Composer (`Cmd+I`) and the rules will apply automatically.
+| Install the CLI globally | `npm install -g career-catalyst` — run `career-catalyst` from any project root without `npx`. |
+| VS Code mentor in all workspaces | Add `.github/copilot-instructions.md` contents to **Settings → Extensions → GitHub Copilot → Chat → Code Generation: Instructions**. The agent file still needs to be present per-repo for `@CareerCatalyst` by name. |
+| Cursor mentor in all projects | Paste `.cursor/rules/catalyst.mdc` into **Cursor Settings → General → Rules for AI**. |
 
 ---
 
 ## Private Rubric Protocol (BYOR)
 
-**Bring Your Own Rubric** — use your company's internal engineering ladder without ever committing it to version control.
+**Bring Your Own Rubric** — use your company's internal engineering ladder without committing it to version control.
 
-1. **Create a local-only file:** Create `docs/PRIVATE_RUBRIC.md`. (This is already in `.gitignore`).
-2. **Paste your ladder:** Fill it with your company's specific level definitions.
-3. **Put it in context:** Open or include `docs/PRIVATE_RUBRIC.md` in your chat/session context when you start a session. When that file is in context, the Catalyst will use it as the primary rubric; otherwise it falls back to `docs/DEFAULT_RUBRIC.md`, ensuring your "Growth Log" is calibrated to your actual promotion criteria.
+1. Create `docs/PRIVATE_RUBRIC.md` (already in `.gitignore`).
+2. Paste your company's level definitions.
+3. Include the file in your chat context. The Catalyst uses it as the primary rubric; otherwise falls back to `docs/DEFAULT_RUBRIC.md`.
 
 ---
 
@@ -104,7 +108,7 @@ career-catalyst/
 ├── .cursor/
 │   └── rules/           # Cursor-specific MDC rules
 ├── docs/
-│   ├── DEFAULT_RUBRIC.md        # Engineer 1 → Principal framework
+│   ├── DEFAULT_RUBRIC.md        # E1 → PR framework + SRE / QA / Security tracks
 │   ├── GROWTH_LOG_TEMPLATE.md   # Template installed by the CLI
 │   └── GROWTH_LOG.md            # Your private log — gitignored, user-created
 └── bin/
@@ -113,12 +117,5 @@ career-catalyst/
 
 ---
 
-## Privacy & Safety
-
-- **Private Mentorship:** Leveling feedback stays in your IDE. It is never posted publicly to PRs.
-- **Local Logs:** Your `GROWTH_LOG.md` is for you and your manager. You choose what to share.
-- **Zero Surveillance:** This tool is an advocate for the engineer, not a report for the organization.
-
----
-
 *Built with the philosophy that every engineer deserves a Staff-level mentor.*
+
