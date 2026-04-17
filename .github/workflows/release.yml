@@ -1,0 +1,89 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: "Version bump type"
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    name: Tag, version, and changelog
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Bump version in package.json
+        id: version
+        run: |
+          # npm version writes the new version to stdout as "vX.Y.Z"
+          NEW_TAG=$(npm version ${{ inputs.bump }} --no-git-tag-version)
+          NEW_VERSION="${NEW_TAG#v}"
+          echo "tag=${NEW_TAG}" >> "$GITHUB_OUTPUT"
+          echo "version=${NEW_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Generate changelog entry
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.tag }}"
+          DATE=$(date -u +%Y-%m-%d)
+          PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -z "$PREV_TAG" ]; then
+            LOG=$(git log --pretty=format:"- %s" --no-merges)
+          else
+            LOG=$(git log "${PREV_TAG}..HEAD" --pretty=format:"- %s" --no-merges)
+          fi
+
+          # Build the new entry
+          ENTRY="## [${VERSION}] - ${DATE}\n\n${LOG}"
+
+          if [ -f CHANGELOG.md ]; then
+            # Inject after the first line (the "# Changelog" heading)
+            HEAD=$(head -1 CHANGELOG.md)
+            TAIL=$(tail -n +2 CHANGELOG.md)
+            printf "%s\n\n%b\n%s" "$HEAD" "$ENTRY" "$TAIL" > CHANGELOG.md
+          else
+            printf "# Changelog\n\n%b\n" "$ENTRY" > CHANGELOG.md
+          fi
+
+      - name: Commit release artifacts
+        run: |
+          VERSION="${{ steps.version.outputs.tag }}"
+          git add package.json CHANGELOG.md
+          # Include lockfile if present
+          [ -f package-lock.json ] && git add package-lock.json || true
+          git commit -m "chore: release ${VERSION}"
+
+      - name: Create annotated tag
+        run: |
+          VERSION="${{ steps.version.outputs.tag }}"
+          git tag -a "${VERSION}" -m "Release ${VERSION}"
+
+      - name: Push commit and tag
+        run: |
+          # Atomic push ensures the commit and tag land together or not at all
+          git push --atomic origin HEAD "${{ steps.version.outputs.tag }}"
