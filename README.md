@@ -10,7 +10,7 @@ Career Catalyst is a private AI thinking partner that lives in your IDE. It audi
 
 We used Career Catalyst to audit its own installer script. Instead of just writing code, the agent identified a critical **Thinking Shift** required to move from Senior to Staff level.
 
-*Demo screenshot intentionally omitted until the repository includes a committed image asset for this section.*
+![Career Catalyst Audit Report demo](https://github.com/user-attachments/assets/c8fe7f3d-a7ff-49eb-bd6c-4ccc3db9a2c5)
 
 ---
 
