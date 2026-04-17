@@ -25,10 +25,33 @@ The core belief: **great engineers aren't just born at Staff level, they're coac
 
 Everything below — the IDE agent, the PR reviewer, and the mindset linter — comes pre-configured. There are no build steps. Follow this path and you will be in a live session within minutes.
 
+### ⚡ Quickstart (Recommended)
+
+The fastest way to add Career Catalyst to any existing project is with `npx`:
+
+```bash
+npx career-catalyst install
+```
+
+This installs the agent files directly into your current project — no cloning, no forking required. You'll be prompted before any file is overwritten.
+
+> **Privacy:** The installer only writes files to your local filesystem. It does not transmit your code, project structure, or any other data to external servers.
+
+**Want the absolute latest (potentially unstable) features?**
+
+```bash
+npx github:aneudy1702/career-catalyst install
+```
+
+This runs directly from the `main` branch of the source repository. Suitable for early adopters — expect rough edges.
+
+---
+
 ### Prerequisites
 
 | Tool | Minimum version | Notes |
 |---|---|---|
+| [Node.js](https://nodejs.org/) | v18+ | Required for `npx career-catalyst` |
 | [VS Code](https://code.visualstudio.com/) | latest stable | or use [Cursor](https://www.cursor.com/) — both are supported |
 | [GitHub Copilot](https://github.com/features/copilot) | v1.200+ extension | requires an active Copilot subscription |
 | Git | any recent version | to fork / clone the repo |
@@ -157,6 +180,8 @@ See [Private Rubric Protocol](#private-rubric-protocol-byor) for full details.
 
 ```
 career-catalyst/
+├── bin/
+│   └── catalyst.js                     # npx installer — sets up agent files in any project
 ├── .github/
 │   ├── agents/
 │   │   └── CareerCatalyst.agent.md         # VS Code Copilot agent definition (explicit @CareerCatalyst)
@@ -173,6 +198,7 @@ career-catalyst/
 ├── docs/
 │   ├── DEFAULT_RUBRIC.md               # Engineer 1 → Principal leveling rubric
 │   └── GROWTH_LOG_TEMPLATE.md          # Growth milestone tracking template
+├── package.json                        # npm package — enables npx career-catalyst install
 └── README.md
 ```
 

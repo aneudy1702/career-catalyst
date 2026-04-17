@@ -1,0 +1,30 @@
+{
+  "name": "career-catalyst",
+  "version": "1.0.0",
+  "description": "AI-powered Staff-level engineering mentor. Audits your thinking, elevates your solutions, and generates promotion-ready evidence.",
+  "type": "module",
+  "bin": {
+    "career-catalyst": "./bin/catalyst.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "career",
+    "mentorship",
+    "engineering",
+    "staff-engineer",
+    "copilot",
+    "cursor",
+    "ai"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aneudy1702/career-catalyst.git"
+  },
+  "homepage": "https://github.com/aneudy1702/career-catalyst#readme",
+  "bugs": {
+    "url": "https://github.com/aneudy1702/career-catalyst/issues"
+  },
+  "license": "MIT"
+}
