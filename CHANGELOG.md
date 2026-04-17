@@ -9,6 +9,14 @@ Versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+
+## [v1.0.2] - 2026-04-17
+
+- ci: fix issue title/body — accurate messaging and unindented markdown table
+- ci: replace SMTP alert with GitHub issue on publish failure
+- ci: add email alert on npm publish failure
+- chore: normalize repository.url via npm pkg fix
+
 ## [v1.0.1] - 2026-04-17
 
 - Replace demo screenshot placeholder with actual image in README

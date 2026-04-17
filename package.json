@@ -1,6 +1,6 @@
 {
   "name": "career-catalyst",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "AI-powered Staff-level engineering mentor — installer CLI",
   "bin": {
     "career-catalyst": "bin/catalyst.js",
