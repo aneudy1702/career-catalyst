@@ -117,5 +117,27 @@ career-catalyst/
 
 ---
 
+## FAQ
+
+**Do I need to install this on every repo?**
+Run `npx career-catalyst` once per project to drop the agent files (`.github/agents/`, `.github/copilot-instructions.md`, `.cursor/rules/`) into that repo. Your global config and Growth Log live in `~/.career-catalyst/` and carry over automatically — you won't be re-prompted for your preferences in the next project.
+
+**Will my level assessments or growth notes ever appear in public PRs?**
+No. Level codes, rubric grades, and Growth Log entries stay in your IDE. The agent is configured to act as a collegial Staff peer in any public-facing context — it never posts leveling feedback to PR comments.
+
+**Can I use my company's internal engineering ladder instead of the default rubric?**
+Yes. Create `docs/PRIVATE_RUBRIC.md` (already in `.gitignore`) and paste your company's level definitions. The agent automatically uses it as the primary benchmark and falls back to `docs/DEFAULT_RUBRIC.md` when the private file isn't present.
+
+**How does the agent know which role track to apply?**
+The agent infers your role from the context of your prompt (e.g., incident postmortems → SRE track, test-automation work → QA track). You can also state your role explicitly at the start of a session and it will lock to that track.
+
+**Where is my Growth Log stored?**
+By default, `~/career-catalyst/GROWTH_LOG.md`. You set the path during the conversational onboarding (`npx career-catalyst`) and it's saved to `~/.career-catalyst/config.json`. You can change it at any time by editing that config file.
+
+**Can I change my feedback style after onboarding?**
+Yes. Tell the agent directly — *"Switch to Direct mode"* or *"Switch to Supportive mode"* — and it will update for the rest of the session. To make the change permanent, edit `feedbackStyle` in `~/.career-catalyst/config.json`.
+
+---
+
 *Built with the philosophy that every engineer deserves a Staff-level mentor.*
 
