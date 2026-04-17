@@ -5,6 +5,12 @@
   "bin": {
     "catalyst": "bin/catalyst.js"
   },
+  "files": [
+    "bin"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
   "engines": {
     "node": ">=18.0.0"
   },

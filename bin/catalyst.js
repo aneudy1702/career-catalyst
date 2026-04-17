@@ -204,6 +204,12 @@ async function install() {
   assertGitRoot();
   console.log('');
 
+  // Allow CI or tests to verify the environment check without triggering downloads
+  if (process.env.CATALYST_CHECK_ONLY) {
+    log.ok('Check-only mode: environment verified. Skipping download and installation.');
+    return;
+  }
+
   // 2. Create a dedicated temp directory for atomic staging
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), 'catalyst-install-'));
   log.step(`Staging area created: ${tmpDir}`);

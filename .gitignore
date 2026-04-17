@@ -13,3 +13,14 @@ Thumbs.db
 .idea/
 *.swp
 *.swo
+
+# Node.js dependencies
+node_modules/
+
+# npm pack tarballs
+*.tgz
+
+# Test / coverage caches
+coverage/
+.nyc_output/
+.tap/
