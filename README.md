@@ -31,7 +31,7 @@ The agent operates in three distinct phases designed to shift your mindset while
 The fastest way to get a Staff-level mentor in your IDE is via the one-liner installer. Open your project root in your terminal:
 
 ```bash
-npx -p career-catalyst catalyst
+npx career-catalyst
 ```
 
 **What this does:**
