@@ -38,17 +38,16 @@ jobs:
           gh issue create \
             --repo "$GITHUB_REPOSITORY" \
             --title "❌ Release workflow failed — ${{ github.ref_name }}" \
-            --body "$(cat <<'EOF'
-## Release workflow failed
-
-| Field | Value |
-|---|---|
-| Release | `${{ github.ref_name }}` |
-| Triggered by | @${{ github.actor }} |
-| Workflow run | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
-
-Check the workflow logs at the link above to diagnose the failure.
-EOF
-)"
+            --body "$ISSUE_BODY"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_BODY: |
+            ## Release workflow failed
+
+            | Field | Value |
+            |---|---|
+            | Release | `${{ github.ref_name }}` |
+            | Triggered by | @${{ github.actor }} |
+            | Workflow run | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
+
+            Check the workflow logs at the link above to diagnose the failure.
