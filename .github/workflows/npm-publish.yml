@@ -24,3 +24,31 @@ jobs:
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+
+  notify-on-failure:
+    name: Open issue on release workflow failure
+    runs-on: ubuntu-latest
+    needs: build-and-publish
+    if: failure()
+    permissions:
+      issues: write
+    steps:
+      - name: Create failure issue
+        run: |
+          gh issue create \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "❌ Release workflow failed — ${{ github.ref_name }}" \
+            --body "$(cat <<'EOF'
+## Release workflow failed
+
+| Field | Value |
+|---|---|
+| Release | `${{ github.ref_name }}` |
+| Triggered by | @${{ github.actor }} |
+| Workflow run | ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} |
+
+Check the workflow logs at the link above to diagnose the failure.
+EOF
+)"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
