@@ -22,7 +22,7 @@ const { execSync } = require('child_process');
 
 // ─── Version & release config ────────────────────────────────────────────────
 
-const CLI_VERSION = '2.0.0';
+const CLI_VERSION = '1.0.0';
 const RELEASE_TAG = `v${CLI_VERSION}`;
 const REPO = 'aneudy1702/career-catalyst';
 const RAW_BASE = `https://raw.githubusercontent.com/${REPO}/${RELEASE_TAG}`;
